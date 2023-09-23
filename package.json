@@ -1,0 +1,19 @@
+{
+  "name": "telegram-webapp-pet-health",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hostmepanda",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hostmepanda/telegram-webapp-pet-health.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hostmepanda/telegram-webapp-pet-health/issues"
+  },
+  "homepage": "https://github.com/hostmepanda/telegram-webapp-pet-health#readme",
+  "description": ""
+}
