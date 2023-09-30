@@ -6,6 +6,21 @@ const petHealthBot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 
 petHealthBot.on('message', async (msg) => {
   const chatId = msg.chat.id;
+  const messageText = msg.text
 
-  await petHealthBot.sendMessage(chatId, 'Received your message!');
+  if (messageText === '/start') {
+    await petHealthBot.sendMessage(
+      chatId,
+      'Received your message!',
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [{
+              text: 'Open pet\'s diary',
+              web_app: { url: 'http://localhost:3000' }
+            }],
+          ],
+      }
+    });
+  }
 })
