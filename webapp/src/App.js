@@ -1,8 +1,14 @@
 import './App.css'
+import {useEffect} from 'react';
 
 function App() {
+  let webApp;
+
   console.log('--window.Telegram', window.Telegram);
-  const { webAppData } = window.Telegram.webApp;
+  useEffect(() => {
+    webApp = window.Telegram.webApp;
+  }, []);
+
   const {
     initDataUnsafe: {
       user: {
@@ -11,7 +17,7 @@ function App() {
         username,
       } = {},
     } = {},
-  } = webAppData
+  } = webApp?.webAppData;
 
   const userNameOrNick = `${userFirstName} ${userLastName}`.trim() ?? username;
 
