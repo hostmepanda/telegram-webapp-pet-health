@@ -1,7 +1,7 @@
 import './App.css'
 
 function App() {
-  const webAppData = window.Telegram.webApp;
+  const { webAppData } = window.Telegram.webApp;
 
   const {
     initDataUnsafe: {
