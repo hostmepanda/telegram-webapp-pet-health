@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <h1>Pet Health Diary!</h1>
-      <h2>Welcome {tg.initDataUnsafe?.user?.username}</h2>
+      <h2>Welcome {tg?.initDataUnsafe?.user?.username}</h2>
     </div>
   );
 }
