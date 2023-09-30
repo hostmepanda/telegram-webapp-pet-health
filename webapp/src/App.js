@@ -6,7 +6,6 @@ function App() {
   const {
     initDataUnsafe: {
       user: {
-        id: userId,
         first_name: userFirstName,
         last_name: userLastName,
         username,
