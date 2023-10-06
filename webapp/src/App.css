@@ -2,3 +2,26 @@ body {
     background: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
 }
+
+.App {
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.dialog {
+    background-color: red;
+}
+
+.p-4 {
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.p-1 {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.pt-1 {
+    padding-top: 4px;
+}

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "build-web-app": "npm --prefix ./webapp run build"
+    "build-web-app": "npm --prefix ./webapp run build",
+    "test:start-all-with-ngrok": "./node_modules/.bin/ngrok start --all"
   },
   "author": "Hostmepanda",
   "license": "Apache-2.0",
@@ -15,5 +16,8 @@
     "url": "https://github.com/hostmepanda/telegram-webapp-pet-health/issues"
   },
   "homepage": "https://github.com/hostmepanda/telegram-webapp-pet-health#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "ngrok": "^5.0.0-beta.2"
+  }
 }
