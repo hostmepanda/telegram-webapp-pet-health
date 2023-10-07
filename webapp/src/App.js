@@ -161,7 +161,11 @@ function App() {
     }
   };
 
-  const show = (position) => {
+  const onSettingsClick = () => {
+
+  };
+
+  /**/const show = (position) => {
     setPosition(position);
     setVisible(true);
   };
@@ -208,7 +212,7 @@ function App() {
           <Card
             style={{width: 40, padding: 0 }}
             color={'neutral'}
-            variant="outlined" size={'sm'} onClick={onAddDiaryClick}>
+            variant="outlined" size={'sm'} onClick={onSettingsClick}>
             <CardContent>
               <IconButton size={'sm'} color={'primary'}>
                 <Settings/>
@@ -383,6 +387,26 @@ function App() {
       >
         <ModalClose/>
         <DialogTitle>Add new record</DialogTitle>
+        <DialogContent
+          style={{ paddingLeft: 25, paddingRight: 25 }}
+        >
+          <div>Note</div>
+          <Input
+            size={'md'}
+            style={{ width: '100%' }}
+            placeholder="Optional: add your notes here"
+            value={recordNote}
+            onChange={({ target: { value: text } }) => setRecordNote(text)}  />
+        </DialogContent>
+      </Drawer>
+      <Drawer
+        open={visible}
+        onClose={() => setVisible(false)}
+        anchor={'bottom'}
+        size={'sm'}
+      >
+        <ModalClose/>
+        <DialogTitle>Settings</DialogTitle>
         <DialogContent
           style={{ paddingLeft: 25, paddingRight: 25 }}
         >
