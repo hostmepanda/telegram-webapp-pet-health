@@ -4,8 +4,8 @@ import {
   CardActions,
   CardContent,
   CardCover,
-  CardOverflow,
-  IconButton,
+  CardOverflow, DialogContent, DialogTitle, Drawer,
+  IconButton, Input, ModalClose,
   Stack,
   Typography
 } from '@mui/joy';
@@ -19,6 +19,8 @@ import BakeryDiningIcon from '@mui/icons-material/BakeryDining';
 import dairyImage from './assets/diary.jpg';
 import DeleteForever from '@mui/icons-material/DeleteForever'
 import AddCircle from '@mui/icons-material/AddCircle'
+import PostAdd from '@mui/icons-material/PostAdd'
+import Settings from '@mui/icons-material/Settings'
 
 import './App.css'
 
@@ -63,14 +65,6 @@ const AddRecordButton = styled.button`
 const HeaderWithButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
-`
-
-const HeaderCaption = styled.div`
-  flex: 0.75;
-`
-
-const HeaderAddDiaryButton = styled.div`
-  flex: 0.15;
 `
 
 function App() {
@@ -125,12 +119,15 @@ function App() {
     }
   }
 
-  const onRemoveDiaryClick = async (diaryId) => {
+  const onRemoveDiaryClick = async () => {
+    const diaryId = selectedDiary;
+
     try {
       await axios.delete(
         `${BASE_URL}/diaries/${diaryId}`,
       );
       setDiaries(diaries.filter(({ _id }) => _id !== diaryId));
+      setSelectedDiary(undefined);
     } catch (error) {
       console.log(error);
     }
@@ -169,33 +166,56 @@ function App() {
     setVisible(true);
   };
 
-  const userNameOrNick = `${userFirstName} ${userLastName}`.trim() ?? username;
-  const footerContent = useMemo( () =>
-    <div>
-      <Button label="No" icon="pi pi-times" onClick={() => {setVisible(false);}} className="p-button-text" />
-      <Button label="Yes" icon="pi pi-check" onClick={async () => {
-        await onAddRecordClick(selectedDiary);
-        setVisible(false);
-      }} autoFocus />
-    </div>, [selectedDiary]
-  );
-
   return (
     <div className="App">
       <HeaderWithButtonWrapper>
-        <HeaderCaption>
-          <H1>Pet Health Diary!</H1>
-          <H2>Welcome {userNameOrNick}</H2>
-        </HeaderCaption>
-        <HeaderAddDiaryButton>
-            {diaries?.length < 2 && (
-              <Card variant="outlined" onClick={onAddDiaryClick}>
-                <CardContent>
-                  <Typography level="title-md">Add diary</Typography>
-                </CardContent>
-              </Card>
-            )}
-        </HeaderAddDiaryButton>
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          spacing={2}
+        >
+          <Typography
+            level={'title-lg'}
+            color={'primary'}
+          >
+            Pet Health Diary!
+          </Typography>
+          {selectedDiary && (
+            <Card
+              style={{width: 40, padding: 0 }}
+              color={'neutral'}
+              variant="outlined" size={'sm'} onClick={onRemoveDiaryClick}>
+              <CardContent>
+                <IconButton size={'sm'} color={'primary'}>
+                  <DeleteForever/>
+                </IconButton>
+              </CardContent>
+            </Card>
+          )}
+          {diaries?.length < 2 && (
+            <Card
+              style={{width: 40, padding: 0}}
+              color={'neutral'}
+              variant="outlined" size={'sm'} onClick={onAddDiaryClick}>
+              <CardContent>
+                <IconButton size={'sm'} color={'primary'}>
+                  <PostAdd/>
+                </IconButton>
+              </CardContent>
+            </Card>
+          )}
+          <Card
+            style={{width: 40, padding: 0 }}
+            color={'neutral'}
+            variant="outlined" size={'sm'} onClick={onAddDiaryClick}>
+            <CardContent>
+              <IconButton size={'sm'} color={'primary'}>
+                <Settings/>
+              </IconButton>
+            </CardContent>
+          </Card>
+        </Stack>
       </HeaderWithButtonWrapper>
       {selectedDiary && diaries?.length > 0 && (
         <button onClick={() => {
@@ -355,27 +375,26 @@ function App() {
         </h3>
       )}
 
-      <Dialog
-        className={'dialog m-0'}
-        header={() => <div className={'pt-1'}>New record in diary</div>}
-        visible={visible}
-        position={position}
-        style={{ width: '100%', height: '50vh' }}
-        onHide={() => setVisible(false)}
-        footer={footerContent}
-        draggable={false}
-        resizable={false}
-        maximizable
+      <Drawer
+        open={visible}
+        onClose={() => setVisible(false)}
+        anchor={'bottom'}
+        size={'sm'}
       >
-        <div className="p-4">
-          <div>Date</div>
-          <input
-            value={recordNote}
-            type={'text'}
+        <ModalClose/>
+        <DialogTitle>Add new record</DialogTitle>
+        <DialogContent
+          style={{ paddingLeft: 25, paddingRight: 25 }}
+        >
+          <div>Note</div>
+          <Input
+            size={'md'}
             style={{ width: '100%' }}
-            onChange={({ target: { value: text } }) => setRecordNote(text)} />
-        </div>
-      </Dialog>
+            placeholder="Optional: add your notes here"
+            value={recordNote}
+            onChange={({ target: { value: text } }) => setRecordNote(text)}  />
+        </DialogContent>
+      </Drawer>
     </div>
   );
 }
