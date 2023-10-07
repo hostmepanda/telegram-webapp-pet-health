@@ -1,4 +1,14 @@
-import {AspectRatio, Box, CardActions, CardContent, CardCover, CardOverflow, Typography} from '@mui/joy';
+import {
+  AspectRatio,
+  Box,
+  CardActions,
+  CardContent,
+  CardCover,
+  CardOverflow,
+  IconButton,
+  Stack,
+  Typography
+} from '@mui/joy';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -6,6 +16,9 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import Card from '@mui/joy/Card';
 import BakeryDiningIcon from '@mui/icons-material/BakeryDining';
+import dairyImage from './assets/diary.jpg';
+import DeleteForever from '@mui/icons-material/DeleteForever'
+import AddCircle from '@mui/icons-material/AddCircle'
 
 import './App.css'
 
@@ -152,6 +165,7 @@ function App() {
       <Button label="Yes" icon="pi pi-check" onClick={() => setVisible(false)} autoFocus />
     </div>
   );
+
   return (
     <div className="App">
       <HeaderWithButtonWrapper>
@@ -174,33 +188,35 @@ function App() {
           Back
         </button>
       )}
-      {!selectedDiary && diaries?.length > 0 && (
-        <Box
-          sx={{
-            perspective: '1000px',
-            transition: 'transform 0.4s',
-            '& > div, & > div > div': {
-              transition: 'inherit',
-            },
-            '&:hover': {
-              '& > div': {
-                transform: 'rotateY(30deg)',
-                '& > div:nth-child(2)': {
-                  transform: 'scaleY(0.9) translate3d(20px, 30px, 40px)',
-                },
-                '& > div:nth-child(3)': {
-                  transform: 'translate3d(45px, 50px, 40px)',
+      {!selectedDiary && diaries?.length > 0 &&
+        diaries?.map(({_id, petName, records}) =>
+          <Box
+            key={_id}
+            sx={{
+              perspective: '1000px',
+              transition: 'transform 0.4s',
+              '& > div, & > div > div': {
+                transition: 'inherit',
+              },
+              '&:hover': {
+                '& > div': {
+                  transform: 'rotateY(30deg)',
+                  '& > div:nth-child(2)': {
+                    transform: 'scaleY(0.9) translate3d(20px, 30px, 40px)',
+                  },
+                  '& > div:nth-child(3)': {
+                    transform: 'translate3d(45px, 50px, 40px)',
+                  },
                 },
               },
-            },
-          }}
-        >
-          {diaries?.map(({ _id, petName, records }) =>
+            }}
+          >
+
             <Card
-              onClick={() => { setSelectedDiary(_id) }}
+              onClick={() => { setTimeout(() => setSelectedDiary(_id), 500) }}
               variant="outlined"
               sx={{
-                minHeight: '180px',
+                minHeight: '80px',
                 width: 300,
                 backgroundColor: '#fff',
                 borderColor: '#000',
@@ -209,7 +225,7 @@ function App() {
               }}
             >
               <Typography level="h2" fontSize="lg" textColor="#000">
-                {petName}
+                Records: {records?.length === 0 ? 'no records yet' : records.length}
               </Typography>
               <CardCover
                 sx={{
@@ -221,7 +237,7 @@ function App() {
                 }}
               >
                 <Typography level="h2" fontSize="lg" textColor="#fff">
-                  Card Cover
+                  <img src={dairyImage} style={{opacity: 0.3}}/>
                 </Typography>
               </CardCover>
               <CardContent
@@ -235,40 +251,81 @@ function App() {
                 }}
               >
                 <Typography level="h2" fontSize="lg" textColor="#fff" m={2}>
-                  Card Content
+                  {petName}
                 </Typography>
               </CardContent>
             </Card>
-          )}
-        </Box>
+
+          </Box>
+
       )}
       {selectedDiary && diaries && diaries?.map(({ records, _id, petName = 'Not provided' }) => {
         return (
           <div key={_id}>
-            <H3>Diary {petName} <RemoveButton onClick={() => onRemoveDiaryClick(_id)}>X</RemoveButton></H3>
-            <div>
-              <Button
-                label="Bottom"
-                icon="pi pi-arrow-up"
-                onClick={() => {
-                  show('bottom');
-                  onAddRecordClick(_id)
-                }}
-                className="p-button-success"
-                style={{minWidth: '10rem'}}
-              />
+            <H3>Diary {petName}</H3>
+            <Stack
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="center"
+              spacing={1}
+            >
+
+              <Card
+                key={`add-record-row`}
+                variant={'soft'}
+                color={'primary'}
+                sx={{minWidth: 143}}>
+                <IconButton
+                  variant={'outlined'}
+                  color={'neutral'}
+                  onClick={() => {
+                    show('bottom');
+                    onAddRecordClick(_id);
+                  }}
+                >
+                  <AddCircle/>
+                </IconButton>
+              </Card>
             {records?.length > 0 && records.map(({ recordDate, note }, index) => (
-              <div key={recordDate ?? index}>
-                <div>record date: {recordDate}</div>
-                <div>note: {note}</div>
-              </div>
+              <Card
+                key={`${recordDate}-${index}`}
+                variant={'soft'}
+                color={'primary'}
+                sx={{ minWidth: 143 }}>
+                <div>
+                  <Typography
+                    level="title-sm"
+                    textColor="inherit"
+                    sx={{ textTransform: 'capitalize' }}
+                  >
+                    {new Date(recordDate).toLocaleDateString()}, {new Date(recordDate).toLocaleTimeString()}
+                  </Typography>
+                  <Typography
+                    level="body-sm"
+                    textColor="inherit"
+                  >
+                    {note}
+                  </Typography>
+                </div>
+                <CardContent orientation="horizontal">
+                  <div>
+                    <Typography level="body-xs">Total price:</Typography>
+                    <Typography fontSize="lg" fontWeight="lg">
+                      $2,900
+                    </Typography>
+                  </div>
+                  <IconButton variant="soft" color={'danger'}>
+                    <DeleteForever />
+                  </IconButton>
+                </CardContent>
+              </Card>
             ))}
               {records?.length === 0 && (
                 <div>
                   You don't have records in this diary yet!
                 </div>
               )}
-            </div>
+            </Stack>
           </div>
         );
       })}
