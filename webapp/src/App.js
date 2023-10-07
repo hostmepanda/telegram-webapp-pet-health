@@ -9,7 +9,7 @@ import {
   Stack,
   Typography
 } from '@mui/joy';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Dialog } from 'primereact/dialog';
@@ -78,6 +78,7 @@ function App() {
 
   const [telegramUserId, setTelegramUserId] = useState();
   const [diaries, setDiaries] = useState([]);
+  const [selectedDiaryRecords, setSelectedDiaryRecords] = useState([]);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState('center');
   const [recordNote, setRecordNote] = useState('');
@@ -137,21 +138,31 @@ function App() {
 
   const onAddRecordClick = async (diaryId) => {
     try {
-      const updatedDiary = await axios.post(
+      const { data: { records: updatedRecords } } = await axios.post(
         `${BASE_URL}/diaries/${diaryId}/records`,
         {
           recordDate: new Date().valueOf(),
           note: '',
         }
       );
-      const indexOfUpdatedDiary = diaries.findIndex(({ _id }) => _id === diaryId);
-      diaries[indexOfUpdatedDiary] = updatedDiary
 
-      setDiaries(diaries);
+      setSelectedDiaryRecords(updatedRecords);
     } catch (error) {
       console.log(error);
     }
   }
+
+  const onDeleteRecordButtonClick = async (recordId) => {
+    try {
+      await axios.delete(
+        `${BASE_URL}/diaries/${selectedDiary}/records/${recordId}`,
+      );
+
+      setSelectedDiaryRecords(selectedDiaryRecords.filter(({ _id }) => _id !== recordId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const show = (position) => {
     setPosition(position);
@@ -159,11 +170,14 @@ function App() {
   };
 
   const userNameOrNick = `${userFirstName} ${userLastName}`.trim() ?? username;
-  const footerContent = (
+  const footerContent = useMemo( () =>
     <div>
-      <Button label="No" icon="pi pi-times" onClick={() => setVisible(false)} className="p-button-text" />
-      <Button label="Yes" icon="pi pi-check" onClick={() => setVisible(false)} autoFocus />
-    </div>
+      <Button label="No" icon="pi pi-times" onClick={() => {setVisible(false);}} className="p-button-text" />
+      <Button label="Yes" icon="pi pi-check" onClick={async () => {
+        await onAddRecordClick(selectedDiary);
+        setVisible(false);
+      }} autoFocus />
+    </div>, [selectedDiary]
   );
 
   return (
@@ -184,7 +198,10 @@ function App() {
         </HeaderAddDiaryButton>
       </HeaderWithButtonWrapper>
       {selectedDiary && diaries?.length > 0 && (
-        <button onClick={() => setSelectedDiary(undefined)}>
+        <button onClick={() => {
+          setSelectedDiary(undefined);
+          setSelectedDiaryRecords([]);
+        }}>
           Back
         </button>
       )}
@@ -213,7 +230,14 @@ function App() {
           >
 
             <Card
-              onClick={() => { setTimeout(() => setSelectedDiary(_id), 500) }}
+              onClick={() => {
+                const {records = []} = diaries?.find(({_id: diaryId}) => diaryId === _id) ?? {};
+                setTimeout(() => {
+                  setSelectedDiary(_id);
+                  setSelectedDiaryRecords(records);
+                }, 500);
+
+              }}
               variant="outlined"
               sx={{
                 minHeight: '80px',
@@ -259,36 +283,33 @@ function App() {
           </Box>
 
       )}
-      {selectedDiary && diaries && diaries?.map(({ records, _id, petName = 'Not provided' }) => {
-        return (
-          <div key={_id}>
-            <H3>Diary {petName}</H3>
-            <Stack
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="center"
-              spacing={1}
-            >
-
+      {selectedDiary && selectedDiaryRecords?.length > 0 && (
+        <div>
+          <H3>Diary {diaries.find(({ _id }) => _id === selectedDiary)?.petName ?? 'Unnamed pet'}</H3>
+          <Stack
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={1}
+          >
+            <Card
+              key={`add-record-row`}
+              variant={'soft'}
+              color={'primary'}
+              sx={{minWidth: 143}}>
+              <IconButton
+                variant={'outlined'}
+                color={'neutral'}
+                onClick={() => {
+                  show('bottom');
+                }}
+              >
+                <AddCircle/>
+              </IconButton>
+            </Card>
+            {selectedDiaryRecords.map(({ recordDate, note, _id }, index) => (
               <Card
-                key={`add-record-row`}
-                variant={'soft'}
-                color={'primary'}
-                sx={{minWidth: 143}}>
-                <IconButton
-                  variant={'outlined'}
-                  color={'neutral'}
-                  onClick={() => {
-                    show('bottom');
-                    onAddRecordClick(_id);
-                  }}
-                >
-                  <AddCircle/>
-                </IconButton>
-              </Card>
-            {records?.length > 0 && records.map(({ recordDate, note }, index) => (
-              <Card
-                key={`${recordDate}-${index}`}
+                key={_id}
                 variant={'soft'}
                 color={'primary'}
                 sx={{ minWidth: 143 }}>
@@ -314,21 +335,20 @@ function App() {
                       $2,900
                     </Typography>
                   </div>
-                  <IconButton variant="soft" color={'danger'}>
+                  <IconButton variant="soft" color={'danger'} onClick={() => onDeleteRecordButtonClick(_id)}>
                     <DeleteForever />
                   </IconButton>
                 </CardContent>
               </Card>
             ))}
-              {records?.length === 0 && (
-                <div>
-                  You don't have records in this diary yet!
-                </div>
-              )}
-            </Stack>
-          </div>
-        );
-      })}
+            {selectedDiaryRecords?.length === 0 && (
+              <div>
+                You don't have records in this diary yet!
+              </div>
+            )}
+          </Stack>
+        </div>
+      )}
       {diaries?.length === 0 && (
         <h3 style={{fontSize: 12, width: '100%', textAlign: 'center'}}>You have not created yet a diary for your
           pet
