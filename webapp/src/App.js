@@ -74,6 +74,7 @@ function App() {
   const [diaries, setDiaries] = useState([]);
   const [selectedDiaryRecords, setSelectedDiaryRecords] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [isSettingVisible, setIsSettingVisible] = useState(false);
   const [position, setPosition] = useState('center');
   const [recordNote, setRecordNote] = useState('');
   const [selectedDiary, setSelectedDiary] = useState(undefined);
@@ -162,7 +163,7 @@ function App() {
   };
 
   const onSettingsClick = () => {
-
+    setIsSettingVisible(true);
   };
 
   /**/const show = (position) => {
@@ -197,7 +198,7 @@ function App() {
               </CardContent>
             </Card>
           )}
-          {diaries?.length < 2 && (
+          {!selectedDiary && diaries?.length < 2 && (
             <Card
               style={{width: 40, padding: 0}}
               color={'neutral'}
@@ -209,8 +210,8 @@ function App() {
               </CardContent>
             </Card>
           )}
-          <Card
-            style={{width: 40, padding: 0 }}
+          {selectedDiary && <Card
+            style={{width: 40, padding: 0}}
             color={'neutral'}
             variant="outlined" size={'sm'} onClick={onSettingsClick}>
             <CardContent>
@@ -218,7 +219,7 @@ function App() {
                 <Settings/>
               </IconButton>
             </CardContent>
-          </Card>
+          </Card>}
         </Stack>
       </HeaderWithButtonWrapper>
       {selectedDiary && diaries?.length > 0 && (
@@ -307,7 +308,7 @@ function App() {
           </Box>
 
       )}
-      {selectedDiary && selectedDiaryRecords?.length > 0 && (
+      {selectedDiary && (
         <div>
           <H3>Diary {diaries.find(({ _id }) => _id === selectedDiary)?.petName ?? 'Unnamed pet'}</H3>
           <Stack
@@ -331,7 +332,7 @@ function App() {
                 <AddCircle/>
               </IconButton>
             </Card>
-            {selectedDiaryRecords.map(({ recordDate, note, _id }, index) => (
+            {selectedDiaryRecords?.length > 0 && selectedDiaryRecords.map(({ recordDate, note, _id }, index) => (
               <Card
                 key={_id}
                 variant={'soft'}
@@ -400,23 +401,32 @@ function App() {
         </DialogContent>
       </Drawer>
       <Drawer
-        open={visible}
-        onClose={() => setVisible(false)}
-        anchor={'bottom'}
+        open={isSettingVisible}
+        onClose={() => setIsSettingVisible(false)}
+        anchor={'left'}
         size={'sm'}
       >
         <ModalClose/>
-        <DialogTitle>Settings</DialogTitle>
+        <DialogTitle
+        >Settings</DialogTitle>
         <DialogContent
           style={{ paddingLeft: 25, paddingRight: 25 }}
         >
-          <div>Note</div>
-          <Input
-            size={'md'}
-            style={{ width: '100%' }}
-            placeholder="Optional: add your notes here"
-            value={recordNote}
-            onChange={({ target: { value: text } }) => setRecordNote(text)}  />
+          {diaries.find(({ _id }) => _id === selectedDiary)?.recordTypes?.map((recordType) => {
+
+            return (
+              <Stack
+                key={recordType._id}
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={1}
+              >
+                <Typography>{recordType.symbol}</Typography>
+                <Typography>{recordType.caption}</Typography>
+              </Stack>
+            );
+          })}
         </DialogContent>
       </Drawer>
     </div>

@@ -39,6 +39,32 @@ const createDiaryForUserId = async (req: express.Request, res: express.Response)
 
   const createdDiary = new Diaries({
     telegramChatId: userId,
+    recordTypes: [
+      {
+        symbol: '🍗',
+        caption: 'Food',
+      },
+      {
+        symbol: '💧',
+        caption: 'Water',
+      },
+      {
+        symbol: '💊',
+        caption: 'Medicine',
+      },
+      {
+        symbol: '💩',
+        caption: 'toilet',
+      },
+      {
+        symbol: '🤮',
+        caption: 'vomit',
+      },
+      {
+        symbol: '😵‍💫',
+        caption: 'illness attack',
+      },
+    ],
   });
 
   await createdDiary.save();
