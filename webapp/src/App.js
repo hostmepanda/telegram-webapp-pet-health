@@ -21,6 +21,7 @@ import DeleteForever from '@mui/icons-material/DeleteForever'
 import AddCircle from '@mui/icons-material/AddCircle'
 import PostAdd from '@mui/icons-material/PostAdd'
 import Settings from '@mui/icons-material/Settings'
+import Done from '@mui/icons-material/Done'
 
 import './App.css'
 
@@ -135,13 +136,14 @@ function App() {
     }
   }
 
-  const onAddRecordClick = async (diaryId) => {
+  const onAddRecordClick = async () => {
     try {
-      const { data: { records: updatedRecords } } = await axios.post(
-        `${BASE_URL}/diaries/${diaryId}/records`,
+      const {data: {records: updatedRecords}} = await axios.post(
+        `${BASE_URL}/diaries/${selectedDiary}/records`,
         {
           recordDate: new Date().valueOf(),
-          note: '',
+          note: recordNote,
+          recordType: selectedRecordType,
         }
       );
 
@@ -149,7 +151,7 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const onDeleteRecordButtonClick = async (recordId) => {
     try {
@@ -333,7 +335,7 @@ function App() {
                 <AddCircle/>
               </IconButton>
             </Card>
-            {selectedDiaryRecords?.length > 0 && selectedDiaryRecords.map(({ recordDate, note, _id }, index) => (
+            {selectedDiaryRecords?.length > 0 && selectedDiaryRecords.map(({ recordDate, note, _id, recordType }, index) => (
               <Card
                 key={_id}
                 variant={'soft'}
@@ -356,9 +358,9 @@ function App() {
                 </div>
                 <CardContent orientation="horizontal">
                   <div>
-                    <Typography level="body-xs">Total price:</Typography>
+                    <Typography level="body-xs">{recordType.caption}</Typography>
                     <Typography fontSize="lg" fontWeight="lg">
-                      $2,900
+                      {recordType.symbol}
                     </Typography>
                   </div>
                   <IconButton variant="soft" color={'danger'} onClick={() => onDeleteRecordButtonClick(_id)}>
@@ -387,8 +389,27 @@ function App() {
         anchor={'bottom'}
         size={'md'}
       >
-        <ModalClose/>
-        <DialogTitle>Add new record</DialogTitle>
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={1}
+          style={{ width: '90%', paddingTop: 10, paddingLeft: 10 }}
+        >
+          <DialogTitle style={{ flex: 0.9 }}>
+            Add new record
+          </DialogTitle>
+          <IconButton size={'sm'} variant={'outlined'} onClick={() => {
+            void onAddRecordClick();
+            setVisible(false);
+            setSelectedRecordType(undefined);
+            setRecordNote('');
+          }}>
+            <Done />
+          </IconButton>
+        </Stack>
+        <ModalClose variant={'outlined'} />
+
         <DialogContent
           style={{ paddingLeft: 25, paddingRight: 25, paddingBottom: 40 }}
         >
@@ -414,7 +435,7 @@ function App() {
             }
           </Stack>
 
-          <div>Note</div>
+          <div>Note (Optional)</div>
           <Input
             size={'md'}
             style={{ width: '100%' }}

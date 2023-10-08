@@ -8,6 +8,10 @@ const DiaryModelSchema = new mongoose.Schema({
     updatedAt: { type: Date, default: new Date() },
     recordDate: { type: Date, default: new Date() },
     note: String,
+    recordType: {
+      symbol: String,
+      caption: String,
+    },
   }],
   recordTypes: [{
     symbol: String,
