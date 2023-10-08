@@ -358,9 +358,9 @@ function App() {
                 </div>
                 <CardContent orientation="horizontal">
                   <div>
-                    <Typography level="body-xs">{recordType.caption}</Typography>
+                    <Typography level="body-xs">{recordType?.caption}</Typography>
                     <Typography fontSize="lg" fontWeight="lg">
-                      {recordType.symbol}
+                      {recordType?.symbol}
                     </Typography>
                   </div>
                   <IconButton variant="soft" color={'danger'} onClick={() => onDeleteRecordButtonClick(_id)}>
@@ -400,6 +400,9 @@ function App() {
             Add new record
           </DialogTitle>
           <IconButton size={'sm'} variant={'outlined'} onClick={() => {
+            if(!selectedRecordType) {
+              return;
+            }
             void onAddRecordClick();
             setVisible(false);
             setSelectedRecordType(undefined);
