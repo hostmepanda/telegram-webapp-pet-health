@@ -78,6 +78,7 @@ function App() {
   const [position, setPosition] = useState('center');
   const [recordNote, setRecordNote] = useState('');
   const [selectedDiary, setSelectedDiary] = useState(undefined);
+  const [selectedRecordType, setSelectedRecordType] = useState(undefined);
 
   const {
     initDataUnsafe: {
@@ -384,13 +385,35 @@ function App() {
         open={visible}
         onClose={() => setVisible(false)}
         anchor={'bottom'}
-        size={'sm'}
+        size={'md'}
       >
         <ModalClose/>
         <DialogTitle>Add new record</DialogTitle>
         <DialogContent
-          style={{ paddingLeft: 25, paddingRight: 25 }}
+          style={{ paddingLeft: 25, paddingRight: 25, paddingBottom: 40 }}
         >
+          <div>Choose type</div>
+          <Stack
+            direction="row"
+            justifyContent="space-evenly"
+            flexWrap={'wrap'}
+            alignItems="center"
+            spacing={1}
+          >
+            {
+              diaries.find(({ _id }) => _id === selectedDiary)?.recordTypes?.map((recordType) => (
+                <IconButton
+                  style={{ marginTop: 2 }}
+                  variant={recordType?._id === selectedRecordType?._id ? 'solid' : 'outlined'}
+                  color={ recordType?._id === selectedRecordType?._id ? 'success' : 'neutral' }
+                  key={recordType._id} onClick={() => recordType._id === selectedRecordType?._id ? setSelectedRecordType(undefined) : setSelectedRecordType(recordType)}>
+                  <Typography>{recordType.symbol}</Typography>
+                  <Typography>{recordType.caption}</Typography>
+                </IconButton>
+              ))
+            }
+          </Stack>
+
           <div>Note</div>
           <Input
             size={'md'}
@@ -398,6 +421,7 @@ function App() {
             placeholder="Optional: add your notes here"
             value={recordNote}
             onChange={({ target: { value: text } }) => setRecordNote(text)}  />
+
         </DialogContent>
       </Drawer>
       <Drawer
