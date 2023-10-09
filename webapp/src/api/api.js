@@ -12,7 +12,9 @@ export const fetchAllDiaryByUserId = async (userId, setState) => {
 				},
 			}
 		);
-		setState(response.data);
+		if (Array.isArray(response.data)) {
+			setState(response.data);
+		}
 	} catch (error) {
 		console.log(error.message);
 	}

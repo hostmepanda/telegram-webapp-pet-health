@@ -13,10 +13,14 @@ const DB_URI = process.env.DB_URI || 'http://127.0.0.1';
 (async () => {
   const expressApp = express();
 
+  const petHealthBot = new TelegramBot(TELEGRAM_BOT_TOKEN, {
+    polling: true,
+  });
+
   expressApp.use(express.json());
   expressApp.use(cors());
   expressApp.use('/users', usersRouter);
-  expressApp.use('/diaries', diariesRouter);
+  expressApp.use('/diaries', diariesRouter(petHealthBot));
 
   expressApp.listen(4000, () => {
     console.log(`expressApp app listening on port ${4000}`)
@@ -33,28 +37,27 @@ const DB_URI = process.env.DB_URI || 'http://127.0.0.1';
     );
   }
 
-  const petHealthBot = new TelegramBot(TELEGRAM_BOT_TOKEN, {
-    polling: true,
-  });
+  petHealthBot
+    .on('message', async (msg) => {
+      const chatId = msg.chat.id;
+      const messageText = msg.text
 
-  petHealthBot.on('message', async (msg) => {
-    const chatId = msg.chat.id;
-    const messageText = msg.text
+      console.log('==msg', msg);
 
-    if (messageText === '/start') {
-      await petHealthBot.sendMessage(
-        chatId,
-        'Received your message!',
-        {
-          reply_markup: {
-            inline_keyboard: [
-              [{
-                text: 'Open pet\'s diary',
-                web_app: { url: WEB_APP_URL }
-              }],
-            ],
-          }
-        });
-    }
-  })
+      if (messageText === '/start') {
+        await petHealthBot.sendMessage(
+          chatId,
+          'Received your message!',
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [{
+                  text: 'Open pet\'s diary',
+                  web_app: {url: WEB_APP_URL}
+                }],
+              ],
+            }
+          });
+      }
+    })
 })();

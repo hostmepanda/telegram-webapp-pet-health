@@ -91,9 +91,9 @@ export const Header = (
 					style={{ minWidth: 150, width: '100%', paddingTop: 10 }}
 				>
 					{selectedDiary
-						&& diaries.find(({_id}) => _id === selectedDiary)?.petName
+						&& diaries?.find(({_id}) => _id === selectedDiary)?.petName
 						&& <Typography level={'title-lg'} color={'white'}>
-							Diary of {diaries.find(({_id}) => _id === selectedDiary)?.petName ?? 'Unnamed pet'}
+							Diary of {diaries?.find(({_id}) => _id === selectedDiary)?.petName ?? 'Unnamed pet'}
 					</Typography>}
 					<Typography level={'title-sm'} color={'primary'}>
 						Pet Health Diary!

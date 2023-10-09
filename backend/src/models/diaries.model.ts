@@ -1,7 +1,14 @@
 import mongoose from "mongoose";
 
-const DiaryModelSchema = new mongoose.Schema({
+export const DiaryModelSchema = new mongoose.Schema({
   telegramChatId: String,
+  sharedWith: [{
+    telegramId: String,
+    userName: String,
+    firstName: String,
+    lastName: String,
+    checkCode: Number,
+  }],
   petName: { type: String, default: 'Waffle' },
   records: [{
     createdAt: { type: Date, default: new Date() },
