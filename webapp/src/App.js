@@ -189,7 +189,7 @@ function App() {
             style={{ width: '100%' }}
             placeholder="Optional: add your notes here"
             value={recordNote}
-            onChange={({ target: { value: text } }) => setRecordNote(text)}  />
+            onChange={({ target: { value: text } }) => setRecordNote(`${text}`)}  />
 
         </DialogContent>
       </Drawer>

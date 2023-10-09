@@ -48,7 +48,7 @@ export const Header = (
 					petName,
 				},
 			);
-			setDiaries([...diaries, createdDiary.data]);
+			setDiaries(diaries.push(createdDiary.data));
 		} catch (error) {
 			console.log(error);
 		}
@@ -128,7 +128,7 @@ export const Header = (
 						</Card>
 					</Stack>)}
 
-				{!selectedDiary && diaries?.length < 2 && (
+				{!selectedDiary && diaries?.length < 20 && (
 					<Card
 						style={{width: 40, padding: 0}}
 						color={'neutral'}

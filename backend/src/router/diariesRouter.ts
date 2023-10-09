@@ -36,9 +36,11 @@ const getDiaryByUserId = async (req: express.Request, res: express.Response) => 
 
 const createDiaryForUserId = async (req: express.Request, res: express.Response) => {
   const { userId } = req.params;
+  const { petName } = req.body;
 
   const createdDiary = new Diaries({
     telegramChatId: userId,
+    petName,
     recordTypes: [
       {
         symbol: '🍗',
@@ -54,15 +56,15 @@ const createDiaryForUserId = async (req: express.Request, res: express.Response)
       },
       {
         symbol: '💩',
-        caption: 'toilet',
+        caption: 'Toilet',
       },
       {
         symbol: '🤮',
-        caption: 'vomit',
+        caption: 'Vomit',
       },
       {
         symbol: '😵‍💫',
-        caption: 'illness attack',
+        caption: 'Illness attack',
       },
     ],
   });

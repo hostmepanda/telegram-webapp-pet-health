@@ -1,7 +1,6 @@
 import AddCircle from '@mui/icons-material/AddCircle';
 import DeleteForever from '@mui/icons-material/DeleteForever';
-import {CardContent, IconButton, Stack, Typography} from '@mui/joy';
-import Card from '@mui/joy/Card';
+import {Button, IconButton, Sheet, Stack, Typography} from '@mui/joy';
 
 export const DiaryRecords = (
 	{
@@ -20,52 +19,41 @@ export const DiaryRecords = (
 				alignItems="center"
 				spacing={1}
 			>
-				<Card
-					key={`add-record-row`}
-					variant={'soft'}
+				<Button
+					variant={'outlined'}
 					color={'primary'}
-					sx={{minWidth: 143}}>
-					<IconButton
-						variant={'outlined'}
-						color={'neutral'}
-						onClick={addRecordOnClick}
-					>
-						<AddCircle/>
-					</IconButton>
-				</Card>
+					onClick={addRecordOnClick}
+					startDecorator={<AddCircle />}
+				>Add record</Button>
 				{selectedDiaryRecords?.length > 0 && selectedDiaryRecords.map(({recordDate, note, _id, recordType}) => (
-					<Card
+					<Sheet
 						key={_id}
-						variant={'soft'}
-						color={'primary'}
-						sx={{minWidth: 143}}>
-						<div>
-							<Typography
-								level="title-sm"
-								textColor="inherit"
-								sx={{textTransform: 'capitalize'}}
-							>
-								{new Date(recordDate).toLocaleDateString()}, {new Date(recordDate).toLocaleTimeString()}
-							</Typography>
-							<Typography
-								level="body-sm"
-								textColor="inherit"
-							>
-								{note}
-							</Typography>
-						</div>
-						<CardContent orientation="horizontal">
-							<div>
-								<Typography level="body-xs">{recordType?.caption}</Typography>
-								<Typography fontSize="lg" fontWeight="lg">
-									{recordType?.symbol}
-								</Typography>
+						variant={'outlined'}
+						sx={{ padding: 0, width: '90%' }}
+						color={'neutral'}>
+						<Typography level="body-xs" sx={{ width: '100%', padding: 0 }}>
+							{new Date(recordDate).toLocaleDateString()}, {new Date(recordDate).toLocaleTimeString()}
+						</Typography>
+						<Stack
+							direction={'row'}
+							justifyContent={'flex-start'}
+							alignItems={'center'}
+							sapcing={1}
+							sx={{ padding: 0, paddingLeft: 1, paddingRight: 2 }}
+						>
+							<div style={{ justifyContent: 'center', alignItems: 'center' }}>
+								<Typography sx={{ fontSize: 30 }}>{recordType?.symbol}</Typography>
+								<Typography sx={{ fontSize: 14 }}>{recordType?.caption}</Typography>
 							</div>
-							<IconButton variant="soft" color={'danger'} onClick={() => deleteRecordOnClick(_id)}>
+							<div style={{ flex: 1, alignSelf: 'flex-start', marginLeft: 2, marginRight: 1 }}>
+								<Typography
+									level="body-sm" textColor="inherit">{note ? `Notes: ${note}` : ''}</Typography>
+							</div>
+							<IconButton variant="outlined" color={'danger'} size={'sm'} sx={{ alignSelf: 'flex-start' }} onClick={() => deleteRecordOnClick(_id)}>
 								<DeleteForever/>
 							</IconButton>
-						</CardContent>
-					</Card>
+						</Stack>
+					</Sheet>
 				))}
 				{selectedDiaryRecords?.length === 0 && (
 					<div>
