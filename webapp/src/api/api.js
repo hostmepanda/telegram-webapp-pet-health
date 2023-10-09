@@ -8,7 +8,7 @@ export const fetchAllDiaryByUserId = async (userId, setState) => {
 			`${BASE_URL}/diaries/${userId}`,
 			{
 				headers: {
-					"ngrok-skip-browser-warning": "1",
+				 ...(process.env.REACT_APP_ENVIRONMENT === 'development' ? {"ngrok-skip-browser-warning": "1"} : undefined),
 				},
 			}
 		);

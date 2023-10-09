@@ -41,6 +41,10 @@ function App() {
     void fetchAllDiaryByUserId(id, setDiaries);
   }, [id]);
 
+  useEffect(() => {
+    webApp.expand();
+  }, []);
+
   const onAddRecordClick = async () => {
     try {
       const {data: {records: updatedRecords}} = await axios.post(
@@ -69,7 +73,6 @@ function App() {
       console.log(error);
     }
   };
-
 
   const show = () => {
     setVisible(true);
@@ -175,7 +178,6 @@ function App() {
             placeholder="Optional: add your notes here"
             value={recordNote}
             onChange={({ target: { value: text } }) => setRecordNote(`${text}`)}  />
-
         </DialogContent>
       </Drawer>
       <Drawer
