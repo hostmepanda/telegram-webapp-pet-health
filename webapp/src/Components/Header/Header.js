@@ -18,6 +18,7 @@ import {
 import Card from '@mui/joy/Card';
 
 import {BASE_URL} from '../../api/api';
+import {BackButton} from '../BackButtton/BackButton';
 
 import {HeaderWithButtonWrapper} from './ui/styles';
 
@@ -29,6 +30,7 @@ export const Header = (
 		setIsSettingVisible,
 		setSelectedDiary,
 		telegramUserId,
+		backButtonOnClick,
 	},
 ) => {
 	const [isAddDiaryDialogOpened, setIsAddDiaryDialogOpened] = useState(false);
@@ -71,32 +73,61 @@ export const Header = (
 		<HeaderWithButtonWrapper>
 			<Stack
 				direction="row"
-				justifyContent="flex-end"
+				justifyContent="space-between"
 				alignItems="center"
 				spacing={2}
+				style={{ width: '100%', paddingBottom: 10 }}
 			>
-				<Typography
-					level={'title-lg'}
-					color={'primary'}
+				<BackButton
+					selectedDiary={selectedDiary}
+					diaries={diaries}
+					onClick={backButtonOnClick}
+				/>
+				<Stack
+					direction="column"
+					justifyContent="flex-start"
+					alignItems="flex-start"
+					spacing={1}
+					style={{ minWidth: 150, width: '100%', paddingTop: 10 }}
 				>
-					Pet Health Diary!
-				</Typography>
-				{selectedDiary
-					&& diaries.find(({_id}) => _id === selectedDiary)?.petName
-					&&
-					<Typography>Diary of {diaries.find(({_id}) => _id === selectedDiary)?.petName ?? 'Unnamed pet'}</Typography>}
+					{selectedDiary
+						&& diaries.find(({_id}) => _id === selectedDiary)?.petName
+						&& <Typography level={'title-lg'} color={'white'}>
+							Diary of {diaries.find(({_id}) => _id === selectedDiary)?.petName ?? 'Unnamed pet'}
+					</Typography>}
+					<Typography level={'title-sm'} color={'primary'}>
+						Pet Health Diary!
+					</Typography>
+				</Stack>
+
 				{selectedDiary && (
-					<Card
-						style={{width: 40, padding: 0}}
-						color={'neutral'}
-						variant="outlined" size={'sm'} onClick={onRemoveDiaryClick}>
-						<CardContent>
-							<IconButton size={'sm'} color={'primary'}>
-								<DeleteForever/>
-							</IconButton>
-						</CardContent>
-					</Card>
-				)}
+					<Stack
+						direction={'row'}
+						spacing={1}
+						justifyContent={'flex-end'}
+					>
+						<Card
+							style={{width: 40, padding: 0}}
+							color={'neutral'}
+							variant="outlined" size={'sm'} onClick={onRemoveDiaryClick}>
+							<CardContent>
+								<IconButton size={'sm'} color={'primary'}>
+									<DeleteForever/>
+								</IconButton>
+							</CardContent>
+						</Card>
+						<Card
+							style={{width: 40, padding: 0}}
+							color={'neutral'}
+							variant="outlined" size={'sm'} onClick={onSettingsClick}>
+							<CardContent>
+								<IconButton size={'sm'} color={'primary'}>
+									<Settings/>
+								</IconButton>
+							</CardContent>
+						</Card>
+					</Stack>)}
+
 				{!selectedDiary && diaries?.length < 2 && (
 					<Card
 						style={{width: 40, padding: 0}}
@@ -109,16 +140,6 @@ export const Header = (
 						</CardContent>
 					</Card>
 				)}
-				{selectedDiary && <Card
-					style={{width: 40, padding: 0}}
-					color={'neutral'}
-					variant="outlined" size={'sm'} onClick={onSettingsClick}>
-					<CardContent>
-						<IconButton size={'sm'} color={'primary'}>
-							<Settings/>
-						</IconButton>
-					</CardContent>
-				</Card>}
 			</Stack>
 			<Drawer
 				open={isAddDiaryDialogOpened}

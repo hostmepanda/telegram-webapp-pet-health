@@ -10,7 +10,7 @@ export const BackButton = (
 	},
 ) => {
 	return selectedDiary && diaries?.length > 0
-		? <IconButton onClick={onClick}>
+		? <IconButton size={'sm'} color={'primary'} style={{height: 10, marginLeft: -10 }} onClick={onClick}>
 			<ArrowBack/>
 		</IconButton>
 		: <></>;

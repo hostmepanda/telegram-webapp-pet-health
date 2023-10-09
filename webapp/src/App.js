@@ -14,7 +14,6 @@ import Done from '@mui/icons-material/Done'
 
 import './App.css'
 import {BASE_URL} from './api/api';
-import {BackButton} from './Components/BackButtton/BackButton';
 import {DiaryCoverCard} from './Components/DiaryCoverCard/DiaryCoverCard';
 import {DiaryRecords} from './Components/DiaryRecords/DiaryRecords';
 import {Header} from './Components/Header/Header';
@@ -115,11 +114,7 @@ function App() {
         setIsSettingVisible={setIsSettingVisible}
         setSelectedDiary={setSelectedDiary}
         telegramUserId={telegramUserId}
-      />
-      <BackButton
-        selectedDiary={selectedDiary}
-        diaries={diaries}
-        onClick={backButtonOnClick}
+        backButtonOnClick={backButtonOnClick}
       />
       <DiaryCoverCard
         selectedDiary={selectedDiary}
