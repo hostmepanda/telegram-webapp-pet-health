@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "ts-node-dev src/start-bot.ts",
-    "start": "./node_modules/.bin/tsc; node build/start-bot.js"
+    "start": "node build/start-bot.js",
+    "build": "./node_modules/.bin/tsc"
   },
   "author": "",
   "license": "ISC",
