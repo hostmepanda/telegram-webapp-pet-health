@@ -74,7 +74,7 @@ export const DiaryCoverCard = (
 						}}
 					>
 						<Typography level="h2" fontSize="lg" textColor="#fff">
-							<img src={diaryImage} style={{opacity: 0.3}} alt={'Image of a diary'}/>
+							<img src={diaryImage} style={{opacity: 0.3}} alt={'background of a diary'}/>
 						</Typography>
 					</CardCover>
 					<CardContent
