@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const DiaryModelSchema = new mongoose.Schema({
   telegramChatId: String,
-  petName: { type: String, default: 'Not provided' },
+  petName: { type: String, default: 'Waffle' },
   records: [{
     createdAt: { type: Date, default: new Date() },
     updatedAt: { type: Date, default: new Date() },
