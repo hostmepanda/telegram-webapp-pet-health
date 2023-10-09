@@ -17,7 +17,7 @@ import {
 } from '@mui/joy';
 import Card from '@mui/joy/Card';
 
-import {BASE_URL} from '../../api/api';
+import {BASE_URL, fetchAllDiaryByUserId} from '../../api/api';
 import {BackButton} from '../BackButtton/BackButton';
 
 import {HeaderWithButtonWrapper} from './ui/styles';
@@ -42,13 +42,13 @@ export const Header = (
 
 	const onAddDiaryClick = async () => {
 		try {
-			const createdDiary = await axios.post(
+			await axios.post(
 				`${BASE_URL}/diaries/${telegramUserId}`,
 				{
 					petName,
 				},
 			);
-			setDiaries(diaries.push(createdDiary.data));
+			await fetchAllDiaryByUserId(telegramUserId, setDiaries)
 		} catch (error) {
 			console.log(error);
 		}

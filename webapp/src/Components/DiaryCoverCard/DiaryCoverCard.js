@@ -1,4 +1,5 @@
-import {Box, CardContent, CardCover, Typography} from '@mui/joy';
+import PostAdd from '@mui/icons-material/PostAdd';
+import {Box, CardContent, CardCover, IconButton, Typography} from '@mui/joy';
 import Card from '@mui/joy/Card';
 import React from 'react';
 
@@ -13,8 +14,15 @@ export const DiaryCoverCard = (
 ) => {
 
 	const noDiaryExists= (
-		<h3 style={{fontSize: 12, width: '100%', textAlign: 'center'}}>
+		<h3 style={{fontSize: 15, width: '100%', textAlign: 'center' }}>
 			You have not created yet a diary for your pet
+					<Typography sx={{ fontSize: 15, paddingTop: 2, color: 'white' }}>
+						To add a diary click{' '}
+						<IconButton size={'sm'} color={'primary'} variant={'outlined'} sx={{ backgroundColor: 'white' }}>
+							<PostAdd/>
+						</IconButton>
+						{' '}button
+					</Typography>
 		</h3>
 	);
 

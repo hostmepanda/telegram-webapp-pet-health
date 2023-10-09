@@ -13,7 +13,7 @@ import axios from 'axios';
 import Done from '@mui/icons-material/Done'
 
 import './App.css'
-import {BASE_URL} from './api/api';
+import {BASE_URL, fetchAllDiaryByUserId} from './api/api';
 import {DiaryCoverCard} from './Components/DiaryCoverCard/DiaryCoverCard';
 import {DiaryRecords} from './Components/DiaryRecords/DiaryRecords';
 import {Header} from './Components/Header/Header';
@@ -32,29 +32,13 @@ function App() {
 
   const {
     initDataUnsafe: {
-      user: {
-        id,
-      } = {},
+      user: {id} = {},
     } = {},
   } = webApp ?? {};
 
   useEffect(() => {
     setTelegramUserId(id);
-    (async () => {
-      try {
-        const response = await axios.get(
-          `${BASE_URL}/diaries/${id}`,
-          {
-            headers: {
-              "ngrok-skip-browser-warning": "1",
-            },
-          }
-        );
-        setDiaries(response.data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    })()
+    void fetchAllDiaryByUserId(id, setDiaries);
   }, [id]);
 
   const onAddRecordClick = async () => {
@@ -91,9 +75,10 @@ function App() {
     setVisible(true);
   };
 
-  const backButtonOnClick = () => {
+  const backButtonOnClick = async () => {
     setSelectedDiary(undefined);
     setSelectedDiaryRecords([]);
+    await fetchAllDiaryByUserId(id, setDiaries);
   }
 
   const diaryCoverCardOnClick = (clickedDiaryId) => {
