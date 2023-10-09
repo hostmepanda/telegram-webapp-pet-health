@@ -3,8 +3,8 @@ import * as mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
 
-import {usersRouter} from "./router/usersRouter";
-import {diariesRouter} from "./router/diariesRouter";
+import {usersRouter} from "./router/userRouter/usersRouter";
+import {diariesRouter} from "./router/diariesRouter/diariesRouter";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'no-bot-token';
 const WEB_APP_URL = process.env.WEB_APP_URL || 'https://locahost:3000';
