@@ -1,11 +1,11 @@
-#About the app
+# About the app
 The app is meant to be a simple diary for pets in which one can add records regarding food, illness attacks, water and toilet.
 
-##Available functionality:
+## Available functionality:
 - Create up to 20 diaries for your pets
 - Add records for: water, phoo, food, vomit and illness attack
 
-##Upcoming functions:
+## Upcoming functions:
 - Share access to your diary to any telegram user
 - Change time for added records
 - Choose time when creating record in a diary
