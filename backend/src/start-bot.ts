@@ -2,7 +2,6 @@ import TelegramBot from 'node-telegram-bot-api';
 import * as mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config'
 
 import {usersRouter} from "./router/userRouter/usersRouter";
 import {diariesRouter} from "./router/diariesRouter/diariesRouter";
@@ -10,6 +9,7 @@ import {diariesRouter} from "./router/diariesRouter/diariesRouter";
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'no-bot-token';
 const WEB_APP_URL = process.env.WEB_APP_URL || 'https://locahost:3000';
 const DB_URI = process.env.DB_URI || 'http://127.0.0.1';
+const LISTEN_PORT = process.env.LISTEN_PORT ?? 4000;
 
 (async () => {
   const expressApp = express();
@@ -23,8 +23,8 @@ const DB_URI = process.env.DB_URI || 'http://127.0.0.1';
   expressApp.use('/users', usersRouter);
   expressApp.use('/diaries', diariesRouter(petHealthBot));
 
-  expressApp.listen(4000, () => {
-    console.log(`expressApp app listening on port ${4000}`)
+  expressApp.listen(LISTEN_PORT, () => {
+    console.log(`expressApp app listening on port ${LISTEN_PORT}`)
   });
 
   try {
