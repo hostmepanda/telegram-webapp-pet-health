@@ -1,5 +1,12 @@
 # About the app
 The app is meant to be a simple diary for pets in which one can add records regarding food, illness attacks, water and toilet.
+## Screenshots
+|||
+|----|----|
+| Adding a record | List of records | 
+|![img.png](assets/add-record.png) | ![img.png](assets/records.png) |
+| Settings | Diaries                        |
+| ![img.png](assets/settings.png) | ![img.png](assets/diaries.png) |
 
 ## Available functionality:
 - Create up to 20 diaries for your pets
@@ -59,3 +66,4 @@ put env variables into `.env` file
 - DB_URI=MONGO_DB_URI
 - TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN
 - WEB_APP_URL=HERE_GOES_URL_OF_DEPLOYED_FRONT_END
+- PROTOCOL_TO_SERVE=https || http
