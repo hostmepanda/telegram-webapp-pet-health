@@ -42,8 +42,6 @@ const DB_URI = process.env.DB_URI || 'http://127.0.0.1';
       const chatId = msg.chat.id;
       const messageText = msg.text
 
-      console.log('==msg', msg);
-
       if (messageText === '/start') {
         await petHealthBot.sendMessage(
           chatId,
