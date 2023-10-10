@@ -47,3 +47,15 @@ For server side an ordinary VPS with installed NodeJS environment would work. At
 1. Create telegram bot through bot father
 2. Setup menu button to open Client’s website you received in previous step
 3. Send /start command to bot
+
+# Environment variables
+## Frontend
+put env variables into `.env` file
+- REACT_APP_BASE_URL=HERE_GOES_URL_OF_DEPLOYED_BACKEND_WITH_PORT_IF_DIFFERENT_FROM_443_OR_80
+`development` value affect ngrok deployments, to hide developer message
+- REACT_APP_ENVIRONMENT=development
+## Backend
+- BOT_USER_NAME=YOUR_TELEGRAM_BOT_NAME
+- DB_URI=MONGO_DB_URI
+- TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN
+- WEB_APP_URL=HERE_GOES_URL_OF_DEPLOYED_FRONT_END

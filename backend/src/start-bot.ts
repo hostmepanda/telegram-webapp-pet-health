@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import * as mongoose from "mongoose";
 import express from 'express';
 import cors from 'cors';
+import 'dotenv/config'
 
 import {usersRouter} from "./router/userRouter/usersRouter";
 import {diariesRouter} from "./router/diariesRouter/diariesRouter";
